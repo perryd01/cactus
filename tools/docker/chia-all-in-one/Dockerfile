@@ -48,8 +48,12 @@ RUN bash install.sh && . ./activate && bash install-timelord.sh && chia init
 
 COPY entry.sh /entry.sh
 COPY launch.sh /launch.sh
+COPY launch.sh /launch.sh
+COPY healthcheck.sh /healthcheck.sh
 COPY private_testnet.yaml ./../root/.chia/my_testnet/config/config.yaml
 RUN chmod +x /launch.sh
+
+HEALTHCHECK --interval=1s --timeout=5s --start-period=60s --retries=300 CMD /healthcheck.sh
 
 ENTRYPOINT [ "entry.sh" ]
 CMD [ "launch.sh" ]
